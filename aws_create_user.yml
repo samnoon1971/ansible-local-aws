@@ -1,0 +1,31 @@
+---
+
+- name: Playbook to create IAM user in aws emulated environment 
+  hosts: 127.0.0.1 
+  connection: local
+  tasks:
+    - name: Install and upgrade pip
+      pip:
+        name: pip
+        extra_args: --upgrade
+        executable: pip3
+    - name: Install boto3 and botocore with pip3 module
+      pip:
+        name: 
+        - boto3
+        - botocore
+        executable: pip3
+    - name: Creates a IAM user on Localstack
+      community.aws.iam_user:
+        name: admin
+        access_key: "{{ ACCESS_KEY_ID }}"
+        secret_key: "{{ SECRET_ACCESS_KEY }}"
+        state: present
+      register: debug_output_iam_user
+
+    - name: Print all the values returned
+      ansible.builtin.debug:
+        msg: "{{ debug_output_iam_user.user }}"
+
+      
+    

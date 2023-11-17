@@ -1,0 +1,29 @@
+version: '3.7'
+
+networks:
+    abrar_localcloud_0:
+        external: true
+
+services:
+  localstack:
+    container_name: "${LOCALSTACK_DOCKER_NAME-localstack_abrar}"
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+    networks:
+      - abrar_localcloud_0
+    environment:
+      - SERVICES=${SERVICES- }  
+      - DEBUG=${DEBUG- }  
+      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR-docker}
+      - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY-}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LAMBDA_REMOTE_DOCKER=false
+      - LAMBDA_REMOVE_CONTAINERS=false
+      - LAMBDA_DOCKER_NETWORK=dev_ops
+      - DEFAULT_REGION=us-east-1
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+    
